@@ -3,6 +3,7 @@ $(document).ready(
     function () {
         $('#conten-crear').hide();
         $('#conten-editar').hide();
+        toastr.success('sdfvsdf');
 
         $('table').on('click', '.eliminar', function () {
 
@@ -38,7 +39,7 @@ $(document).ready(
                     <td class='td-nombre'>"+ u['nombres'] + "</td>\
                     <td class='td-sexo'>"+ u['sexo'] + "</td>\
                     <td class='td-usuario'>"+ u['usuario'] + "</td>\
-                    <td class='td-usuario'>"+ u['Tipo'] + "</td>\
+                    <td class='td-tipo'>"+ u['tipo'] + "</td>\
                     <td>\<div class='btn-group'>\
                     <a href='#' class='btn btn-danger btn-sm eliminar'>\
                     <i class='fa fa-times'></i>\
@@ -66,16 +67,17 @@ $(document).ready(
             $('#inputnombreEdit').val(nombre);
             $('#inputsexoEdit').val(sexo);
             $('#inputusuarioEdit').val(usuario);
-            $('#inputtipoedit').val(Tipo);
+            $('#inputtipoedit').val(tipo);
 
             $('#conten-editar').show('fast');
         })
         
         $('#formEditar').submit(function () {
             a = $('#inputnombreEdit').val();
-            b = $('#inputsexoEdit').val();
+            b = document.getElementById('SexoFem').checked ? 'femenino' : 'masculino'; 
             c = $('#inputusuarioEdit').val();
             d = $('#inputtipoEdit').val();
+            console.log(b);
 
             
 
@@ -118,7 +120,7 @@ $(document).ready(
         )
         $('#formcrear').submit(function () {
             a = $('#inputnombre').val();
-            b = $('#inputsexo').val();
+            b = $('#SexoFem').is(':checked') ? 'F' : 'M';
             c = $('#inputusuario').val();
             d = $('#inputtipo').val();
 

@@ -4,8 +4,18 @@ $(function(){
       
       var file = $(this).data('include') + '.html';
       $(this).load(file, function (params) {
+        
         links = $(document).find('.nav-item a');
+        
         links.each(function () {
+
+          const ruta = $(this).attr('href');
+          const actual = document.location.pathname;
+
+          if (ruta.includes(actual)) {
+            $(this).addClass('active');
+          }
+
           if (document.location.pathname == '/index.html') {
             $(this).attr('href', 'pages/' + $(this).attr('href'));
           }else{

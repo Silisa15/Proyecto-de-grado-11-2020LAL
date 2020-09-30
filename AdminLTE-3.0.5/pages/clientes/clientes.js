@@ -38,7 +38,7 @@ $(document).ready(
                     <td class='td-nombre'>"+ u['nombres'] + "</td>\
                     <td class='td-sexo'>"+ u['sexo'] + "</td>\
                     <td class='td-usuario'>"+ u['usuario'] + "</td>\
-                    <td class='td-usuario'>"+ u['Tipo'] + "</td>\
+                    <td class='td-tipo'>"+ u['tipo'] + "</td>\
                     <td>\<div class='btn-group'>\
                     <a href='#' class='btn btn-danger btn-sm eliminar'>\
                     <i class='fa fa-times'></i>\
@@ -66,7 +66,7 @@ $(document).ready(
             $('#inputnombreEdit').val(nombre);
             $('#inputsexoEdit').val(sexo);
             $('#inputusuarioEdit').val(usuario);
-            $('#inputtipoedit').val(Tipo);
+            $('#inputtipoedit').val(tipo);
 
             $('#conten-editar').show('fast');
         })
