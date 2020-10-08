@@ -16,7 +16,7 @@ $(function(){
             $(this).addClass('active');
           }
 
-          if (document.location.pathname == '/index.html') {
+          if (document.location.pathname == '/index.html' || document.location.pathname == '/index.html' ) {
             $(this).attr('href', 'pages/' + $(this).attr('href'));
           }else{
             $(this).attr('href', '../' + $(this).attr('href'));
