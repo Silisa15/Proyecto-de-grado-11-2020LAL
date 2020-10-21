@@ -6,6 +6,7 @@ $(function () {
     sql = 'SELECT * FROM users';
 
     window.query(sql).then(function (result) {
+
         if (result.length == 0) {
             sql = 'INSERT INTO users (nombres, sexo, usuario, password) VALUES("ADMINISTRADOR", "M", "admin", "123")';
             
@@ -16,26 +17,30 @@ $(function () {
             })
         }
     }, function (error) {
-        console.log('Lo sentimos, ha ocurrido un error', error);
-    })
+        console.log('Lo sentimos, ha ocurrido un error. ERROR!', error);
+    });
 
 
     $('#frmLogin').submit(function (e) {
-        const pass = ("#PassInput").val();
-        const user = ("#UsuarioInput").val();
+        //console.log("hola");
+        e.preventDefault();
+        const pass = $("#PassInput").val();
+        const user = $("#UsuarioInput").val();
 
-        console.log(pass, user);
 
-        sql = 'SELECT * FROM users WHERE password=? and username=?';
+        sql = 'SELECT rowid, * FROM users WHERE password=? and usuario=?';
 
         window.query(sql, [pass, user]).then(function (result) {
-            fila.remove();
-            console.log(result);
-            //window.location.href = "../../"
+            if (result.length > 0) {
+                window.location.href = "../../index.html"
+                
+            }else{
+                toastr.warning('Datos no válidos');
+            }
         }, function (error) {
             console.log('Lo sentimos, ha ocurrido un error', error);
         })
-        e.preventDefault()
+        
     })
 
 
