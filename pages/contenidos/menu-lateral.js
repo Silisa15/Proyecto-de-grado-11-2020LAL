@@ -23,6 +23,10 @@ $(function(){
           }
 
         });
+
+        var USER = JSON.parse(localStorage.usuario);
+        $('.nombre-usuario').html(USER.nombres);
+
       });
     });
 });
