@@ -5,7 +5,7 @@ $(function(){
       var file = $(this).data('include') + '.html';
       $(this).load(file, function (params) {
         
-        links = $(document).find('.nav-item a');
+        links = $(document).find('.nav-ruta a');
         
         links.each(function () {
 
@@ -24,8 +24,16 @@ $(function(){
 
         });
 
-        var USER = JSON.parse(localStorage.usuario);
+        if ("usuario" in localStorage) {
+          var USER = JSON.parse(localStorage.usuario);
         $('.nombre-usuario').html(USER.nombres);
+        }else{
+          if (document.location.pathname == '/index.html' || document.location.pathname == '/index.html' ) {
+            window.location.href = "pages/login/login.html";
+          }else{
+            window.location.href = "../login/login.html";
+          }
+        }       
 
       });
     });

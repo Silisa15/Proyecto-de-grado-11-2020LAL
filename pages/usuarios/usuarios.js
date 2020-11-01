@@ -65,7 +65,7 @@ $(document).ready(
             const tipo = tr.find('.td-tipo').text();
 
             $('#inputnombreEdit').val(nombre);
-            $('#inputsexoEdit').val(sexo);
+            document.getElementById('EditSexoFem').checked ? 'femenino' : 'masculino'; 
             $('#inputusuarioEdit').val(usuario);
             $('#inputtipoedit').val(tipo);
 

@@ -32,7 +32,7 @@ $(function () {
 
         window.query(sql, [pass, user]).then(function (result) {
             if (result.length > 0) {
-                const usuario = result(0);
+                const usuario = result[0];
                 localStorage.setItem('usuario', JSON.stringify(usuario));
                 window.location.href = "../../index.html"
                 
