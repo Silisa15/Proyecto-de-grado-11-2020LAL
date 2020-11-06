@@ -58,15 +58,18 @@ $(document).ready(function () {
     }
   });
   var productosSeleccionados = [];
-  var totaPagar = 0;
+  var totalPagar = 0;
 
   $('#ListaProductosSeleccionados').on('change','input',function () {
     const idProd = $(this).attr('id').substring(9,10);
-    console.log(idProd);
+   
     for (let i = 0; i < productosSeleccionados.length; i++) {
-      const pro = productosSeleccionados[i].producto;
-      if (idProd == pro.rowid){
+      const prod = productosSeleccionados[i].producto;
+      if (idProd == prod.rowid){
         prod.cantidad = $(this).val();
+        prod.precio_total = prod.precio * prod.cantidad;
+        llenarListaProductos();
+        return
       }
       
     }
@@ -74,33 +77,42 @@ $(document).ready(function () {
   
 
   function llenarListaProductos() {
+    totalPagar = 0; 
     $('#ListaProductosSeleccionados').html('');  
     for (let i = 0; i < productosSeleccionados.length; i++) {
       const produc = productosSeleccionados[i].producto;
+      totalPagar = totalPagar + produc.precio_total
       $('#ListaProductosSeleccionados').append(
-        `<li class="row">
+        `<li class="row" style="margin:4px">
         <span class="col">
           ${produc.nombre}
         </span>
         <span class="col">
-          <input type="number"  id="cantidad-${produc.rowid}" value="${produc.cantidad}" class="form-control" />
+          <input type="number" min="1" id="cantidad-${produc.rowid}" value="${produc.cantidad}" class="form-control" />
         </span>
         <span class="col" id="precio-total-${produc.rowid}">
           $${produc.precio}
         </span>
+        <span class="col" id="precio-total-${produc.rowid}">
+          $${produc.precio_total}
+        </span>
         <span class="col">
-        <a href="#" class="quitarProducto">Quitar</a>
+        <a href='#' class='btn btn-danger quitarProducto' data-codigo='${produc.rowid}' >\
+        <i class='fa fa-trash-alt'></i>\
+    </a>\
         </span>
         
         </li>`
       ); 
           
     }
+    $('#totalPagar').html('$' + totalPagar);
   }
   $('#btn-agregar-producto').click(function () {
     const idP = parseInt($('#selectProductos option:selected').val());
     const prod = $('#selectProductos option:selected').data();
-    prod.cantidad = 1;
+    prod.producto.cantidad = 1;
+    prod.producto.precio_total= prod.producto.precio;
     let encontrado = false;
     for (let i = 0; i < productosSeleccionados.length; i++) {
       const prod = productosSeleccionados[i].producto;
@@ -113,6 +125,18 @@ $(document).ready(function () {
       productosSeleccionados.push(prod);
       llenarListaProductos();
     }
-    
   });
+  $('#formbuscarclientes').on('click', '.quitarProducto' , function () {
+    const cod = $(this).data('codigo');
+    let restantes = [];
+
+    for (let i = 0; i < productosSeleccionados.length; i++) {
+      const prod = productosSeleccionados[i];
+      if (prod.producto.rowid != cod) {
+        restantes.push(prod);
+      }
+    }
+    productosSeleccionados = restantes;
+    llenarListaProductos();
+  })
 });
