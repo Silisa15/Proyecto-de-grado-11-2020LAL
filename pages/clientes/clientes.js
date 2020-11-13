@@ -6,19 +6,20 @@ $(document).ready(
 
         $('table').on('click', '.eliminar', function () {
 
-            const resp = confirm('Está segur@ de querer eliminar el usuario?')
+            const resp = confirm('¿Esta seguro que quiere elimnarlo?')
             if (resp) {
                 const fila = $(this).closest('tr');
                 const codi = fila.data('id');
 
 
-                sql = 'DELETE FROM users WHERE rowid=?';
+                sql = 'DELETE FROM clientes WHERE rowid=?';
 
                 window.query(sql, [codi]).then(function (result) {
                     fila.remove();
+                    toastr.success('Eliminado correctamente')
                     console.log('Eliminado correctamente');
                 }, function (error) {
-                    console.log('Lo sentimos, ha ocurrido un error', error);
+                    toastr.error('Error eliminando...', error);
                 })
 
             }
@@ -26,29 +27,37 @@ $(document).ready(
         });
 
 
-        sql = 'SELECT *, rowid FROM users';
+        sql = 'SELECT *, rowid FROM clientes';
         window.query(sql).then(function (result) {
             var items = result;
             for (let i = 0; i < items.length; i++) {
                 const u = items[i];
 
                 $('table tbody').append(
-                    "<tr id='fila-"+ u['rowid'] + "'data-id='" + u['rowid'] + "'>\
-                    <th>"+ u['rowid'] + "</th>\
-                    <td class='td-nombre'>"+ u['nombres'] + "</td>\
-                    <td class='td-sexo'>"+ u['sexo'] + "</td>\
-                    <td class='td-usuario'>"+ u['usuario'] + "</td>\
-                    <td class='td-tipo'>"+ u['tipo'] + "</td>\
-                    <td>\<div class='btn-group'>\
-                    <a href='#' class='btn btn-danger btn-sm eliminar'>\
-                    <i class='fa fa-times'></i>\
-                    </a>\
-                    <a href='#' class='btn btn-info btn-sm editar'>\
-                    <i class='fa fa-pen'></i>\</a>\</div>\</td>\<tr>"
+                    "<tr id='fila-"+ u['rowid'] + "'data-id='" + u['rowid'] + "' >\
+                        <th>"+ u['rowid'] + "</th>\
+                        <td class='td-nombre'>"+ u['nombres'] + "</td>\
+                        <td class='td-apellidos'>"+ u['apellidos'] + "</td>\
+                        <td class='td-sexo'>"+ u['sexo'] + "</td>\
+                        <td class='td-documento'>"+ u['documento'] + "</td>\
+                        <td class='td-acudiente'>"+ u['acudiente'] + "</td>\
+                        <td class='td-telefono'>"+ u['telefono'] + "</td>\
+                        <td>\
+                            <div class='btn-group'>\
+                                <a href='#' class='btn btn-danger btn-sm eliminar'>\
+                                    <i class='fa fa-times'></i>\
+                                </a>\
+                                <a href='#' class='btn btn-info btn-sm editar'>\
+                                    <i class='fa fa-pen'></i>\
+                                </a>\
+                            </div>\
+                        </td>\
+                    <tr>"
                 );
 
             }
         }, function (error) {
+            toastr.error('No se pudo ingresar dato')
             console.log('Dato ingresado', error);
         })
 
@@ -59,39 +68,58 @@ $(document).ready(
             const id= tr.data('id');
 
             const nombre = tr.find('.td-nombre').text();
+            const apellidos = tr.find('.td-apellidos').text();
             const sexo = tr.find('.td-sexo').text();
-            const usuario = tr.find('.td-usuario').text();
-            const tipo = tr.find('.td-tipo').text();
+            const documento = tr.find('.td-documento').text();
+            const acudiente = tr.find('.td-acudiente').text();
+            const telefono = tr.find('.td-telefono').text();
+
+            if (sexo == 'F') {
+                document.getElementById('sexoFemeEdit').checked = true;
+                document.getElementById('sexoMascEdit').checked = false;
+            }else{
+                document.getElementById('sexoMascEdit').checked = true;
+                document.getElementById('sexoFemeEdit').checked = false;
+            }
+
 
             $('#inputnombreEdit').val(nombre);
-            $('#inputsexoEdit').val(sexo);
-            $('#inputusuarioEdit').val(usuario);
-            $('#inputtipoedit').val(tipo);
+            $('#inputapellidosEdit').val(apellidos);
+            $('#inputdocumentoEdit').val(documento);
+            $('#inputacudienteEdit').val(acudiente);
+            $('#inputtelefonoEdit').val(telefono);
+
 
             $('#conten-editar').show('fast');
         })
         
         $('#formEditar').submit(function () {
             a = $('#inputnombreEdit').val();
-            b = $('#inputsexoEdit').val();
-            c = $('#inputusuarioEdit').val();
-            d = $('#inputtipoEdit').val();
+            b = $('#inputapellidosEdit').val();
+            c = document.getElementById('sexoFemeEdit').checked ? 'F' : 'M'; 
+            d = $('#inputdocumentoEdit').val();
+            e = $('#inputacudienteEdit').val();
+            f = $('#inputtelefonoEdit').val();
+
 
             
 
-            sql = 'UPDATE users SET nombres=?,sexo=?,usuario=? WHERE rowid=? ';
+            sql = 'UPDATE clientes SET nombres=?,apellidos=?,sexo=?,documento=? ,acudiente=? ,telefono=? WHERE rowid=? ';
 
-            window.query(sql, [a, b, c,fila_editantdo.data('id')]).then(function (result) {
-
+            window.query(sql, [a, b, c, d, e, f,fila_editantdo.data('id')]).then(function (result) {
+                toastr.success('Se ha editado con éxito');
                 fila_editantdo.find('.td-nombre').text(a);
-                fila_editantdo.find('.td-sexo').text(b);
-                fila_editantdo.find('.td-usuario').text(c);
-                fila_editantdo.find('.td-tipo').text(d);
+                fila_editantdo.find('.td-apellidos').text(b);
+                fila_editantdo.find('.td-sexo').text(c);
+                fila_editantdo.find('.td-documento').text(d);
+                fila_editantdo.find('.td-acudiente').text(e);
+                fila_editantdo.find('.td-telefono').text(f);
 
 
                 $('#conten-editar').hide();
                 
             }, function (error) {
+                toastr.error('No se pudo ingresar dato')
                 console.log('Dato ingresado', error);
             })
 
@@ -108,6 +136,12 @@ $(document).ready(
         $('#btncrear').click(
             function () {
                 $('#conten-crear').show('fast');
+                $('#inputnombre').val('');
+                $('#inputapellidos').val('');
+                $('#inputsexo').val('');
+                $('#inputdocumento').val('');
+                $('#inputacudiente').val('');
+                $('#inputtelefono').val('');
             }
         )
         $('#btncancel').click(
@@ -118,24 +152,29 @@ $(document).ready(
         )
         $('#formcrear').submit(function () {
             a = $('#inputnombre').val();
-            b = $('#inputsexo').val();
-            c = $('#inputusuario').val();
-            d = $('#inputtipo').val();
+            b = $('#inputapellidos').val();
+            c = document.getElementById('sexoFeme').checked ? 'F' : 'M'; 
+            d = $('#inputdocumento').val();
+            e = $('#inputacudiente').val();
+            f = $('#inputtelefono').val();
 
 
-            sql = 'INSERT INTO users(nombres,sexo,usuario,tipo)VALUES(?,?,?,?)';
 
-            window.query(sql, [a, b, c, d]).then(function (result) {
-                alert('Usuario creado con éxito')
-                console.log('Dato ingresado', result);
+            sql = 'INSERT INTO clientes(nombres,apellidos,sexo,documento,acudiente,telefono)VALUES(?,?,?,?,?,?)';
+
+            window.query(sql, [a, b, c, d,e,f]).then(function (result) {
+                toastr.success('Cliente creado con éxito');
+                
 
                 $('table tbody').append(
                     "<tr id='fila-" + result.insertId + "'data-id='" + result.insertId + "'>\
                         <th>"+ result.insertId + "</th>\
                         <td class='td-nombre'>"+ a + "</td>\
-                        <td class='td-sexo'>"+ b + "</td>\
-                        <td class='td-usuario'>"+ c + "</td>\
-                        <td class='td-usuario'>"+ d + "</td>\
+                        <td class='td-apellidos'>"+ b + "</td>\
+                        <td class='td-sexo'>"+ c + "</td>\
+                        <td class='td-documento'>"+ d + "</td>\
+                        <td class='td-acudiente'>"+ e + "</td>\
+                        <td class='td-telefono'>"+ f + "</td>\
                         <td>\
                             <div class='btn-group'>\
                                 <a href='#' class='btn btn-danger btn-sm eliminar'>\
@@ -150,7 +189,8 @@ $(document).ready(
                 );
                 $('#conten-crear').hide();
             }, function (error) {
-                console.log('Dato no ingresado', error);
+                toastr.error('No se pudo ingresar dato')
+                console.log('Dato ingresado', error);
             })
 
 

@@ -74,7 +74,7 @@ $(document).ready(
         
         $('#formEditar').submit(function () {
             a = $('#inputnombreEdit').val();
-            b = document.getElementById('SexoFem').checked ? 'femenino' : 'masculino'; 
+            b = document.getElementById('EditSexoFem').checked ? 'femenino' : 'masculino'; 
             c = $('#inputusuarioEdit').val();
             d = $('#inputtipoEdit').val();
             
